@@ -1,0 +1,90 @@
+extends layout/default.pug
+
+block head 
+    title Users
+block header 
+    h1 Users
+block content 
+    p This is the users page.
+    hr
+    form(method="POST" action="/users/") 
+        div.form_input
+            label Id: 
+            input(type="text" name="id")
+        div.form_input 
+            label Name: 
+            input(type="text" name="name")
+        div.form_input 
+            label Email: 
+            input(type="email" name="email33")
+        div.form_input 
+            button(type="submit") Save user
+            button(type="button" style="margin-left: 20px;" onclick="deleteUsers()") Delete user
+    hr
+    table(border=1 style="width: 100%;") 
+        tr 
+            th 
+            th Id 
+            th Name 
+            th Email 
+        each user of users
+            tr 
+                td 
+                    input(type="checkbox" class="users-table-checkbox" value=user.id)
+                td=user.id
+                td=user.name
+                td=user.email
+    script.
+        function deleteUsers(){
+            var checkedUsers = document.querySelectorAll('.users-table-checkbox')
+            var toDelete = [];
+            for(checkbox of checkedUsers){
+                if(checkbox.checked){
+                    toDelete.push(checkbox.value);
+                }
+            }
+            fetch('/users/', {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    toDelete: toDelete
+                })
+            }).then(function(){
+                location.reload();
+            })
+        }
+
+
+//- html 
+//-     head 
+//-         title Users 
+//-     body 
+//-         h1 Users 
+//-         p This is the users page.
+//-         hr
+//-         form(method="POST" action="/users/") 
+//-             div
+//-                 label Id: 
+//-                 input(type="text" name="id")
+//-             div 
+//-                 label Name: 
+//-                 input(type="text" name="name")
+//-             div 
+//-                 label Email: 
+//-                 input(type="email" name="email")
+//-             div 
+//-                 button(type="submit") Save user
+//-         hr
+//-         table(border=1 style="width: 100%;") 
+//-             tr 
+//-                 th Id 
+//-                 th Name 
+//-                 th Email 
+//-             each user of users
+//-                 tr 
+//-                     td=user.id
+//-                     td=user.name
+//-                     td=user.email
